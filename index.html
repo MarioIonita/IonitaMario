@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>LocuriAcasa — Cazări și experiențe</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
-
+    <link rel="stylesheet" href="index.css"> 
 </head>
 <body>
     <header>
@@ -24,57 +23,61 @@
                 <a href="about.html">Despre</a>
                 <a href="listings.html">Anunturi</a>
                 <a href="support.html">Suport</a>
-                <a class="cta" href="#">Publică anunț</a>
+                
+                <a id="adminLink" href="admin-dashboard.html" style="display:none; color:var(--accent-600); font-weight:700; padding:.4rem .6rem;">Panou Admin</a>
+                
+                <a id="loginButton" class="cta" href="login.html">Login / Publică</a>
+                
+                <a id="logoutButton" class="cta" href="#" style="display:none; background-color:var(--muted);">Logout</a>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        <section class="hero">
-            <div class="hero-card">
+        <section class="search-hero">
+            <div class="search-hero-card">
                 <div>
                     <h1>Găsește locul perfect pentru următoarea ta călătorie</h1>
                     <p class="lead">Caută după oraș, tip de locuință sau experiență — rezervări rapide și gazde de încredere.</p>
                 </div>
 
-                <form id="searchForm" class="search-bar" role="search" aria-label="Caută cazări">
+                <form id="searchForm" class="search-bar large" role="search" aria-label="Caută cazări">
                     <input id="searchInput" type="search" placeholder="Căutați oraș, adresă sau titlu (ex: Brașov, apartament central)" />
                     <button type="submit" aria-label="Caută">Caută</button>
                 </form>
 
-                <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+                <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem">
                     <button class="btn" onclick="filterQuick('Brașov')">Brașov</button>
                     <button class="btn" onclick="filterQuick('București')">București</button>
                     <button class="btn" onclick="filterQuick('Cluj')">Cluj</button>
                 </div>
             </div>
-
-            
-
+        </section>
 
         <section class="section">
             <h2 style="margin:0">Cazări populare</h2>
             <p style="color:var(--muted);margin:.4rem 0 0 0">Selecție aleasă manual de gazdele noastre</p>
 
-            
-    
-            <article class="card" data-title="Casa cu grădină" data-city="Brașov">
-    <img src="https://www.romanian-adventures.ro/uploads/images/casa_clementina_brasov_2.jpeg" alt="Casa din munte" />
-    <div class="info">
-        <div class="title">Casa cu grădină</div>
-        <div class="meta">
-            <span>Brașov</span>
-            <span style="color:var(--muted)">4.9 ★</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="price">220 RON/noapte</div>
-            <div class="actions">
-                <button class="btn">Detalii</button>
-                <button class="btn primary">Rezervă</button>
-            </div>
-        </div>
-    </div>
-</article>
+            <div id="listings" class="grid">
+                
+                <article class="card" data-title="Casa cu grădină" data-city="Brașov">
+                    <img src="https://www.romanian-adventures.ro/uploads/images/casa_clementina_brasov_2.jpeg" alt="Casa din munte" />
+                    <div class="info">
+                        <div class="title">Casa cu grădină</div>
+                        <div class="meta">
+                            <span>Brașov</span>
+                            <span style="color:var(--muted)">4.9 ★</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <div class="price">220 RON/noapte</div>
+                            <div class="actions">
+                                <button class="btn">Detalii</button>
+                                <button class="btn primary">Rezervă</button>
+                                <button class="btn btn-delete" style="display:none;">Șterge</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
 
                 <article class="card" data-title="Apartament modern în centru" data-city="București">
                     <img src="https://www.nobili-interior-design.ro/storage/posts/418/900_design_interior_apartament_modern_in_bucuresti_2.jpg" alt="Apartament modern" />
@@ -86,12 +89,13 @@
                             <div class="actions">
                                 <button class="btn">Detalii</button>
                                 <button class="btn primary">Rezervă</button>
+                                <button class="btn btn-delete" style="display:none;">Șterge</button>
                             </div>
                         </div>
                     </div>
                 </article>
 
-                <article class="card" data-title="Loft luminos" data-city="Cluj">
+                <article class="card" data-title="Garsoniera centrala" data-city="Cluj">
                     <img src="https://hotnews.ro/wp-content/uploads/2024/04/image-2022-02-18-25374024-41-garsoniera-11.jpg" alt="Loft" />
                     <div class="info">
                         <div class="title">Garsoniera centrala</div>
@@ -101,6 +105,7 @@
                             <div class="actions">
                                 <button class="btn">Detalii</button>
                                 <button class="btn primary">Rezervă</button>
+                                <button class="btn btn-delete" style="display:none;">Șterge</button>
                             </div>
                         </div>
                     </div>
@@ -116,6 +121,7 @@
                             <div class="actions">
                                 <button class="btn">Detalii</button>
                                 <button class="btn primary">Rezervă</button>
+                                <button class="btn btn-delete" style="display:none;">Șterge</button>
                             </div>
                         </div>
                     </div>
@@ -131,13 +137,14 @@
                             <div class="actions">
                                 <button class="btn">Detalii</button>
                                 <button class="btn primary">Rezervă</button>
+                                <button class="btn btn-delete" style="display:none;">Șterge</button>
                             </div>
                         </div>
                     </div>
                 </article>
 
                 <article class="card" data-title="Vila cu piscină" data-city="Constanța">
-                    <img src="data:image/jpeg;base64,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" alt="Vila" />
+                    <img src="data:image/jpeg;base64,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" alt="Vila" />
                     <div class="info">
                         <div class="title">Studio minimalist</div>
                         <div class="meta"><span>Constanța</span><span>4.9 ★</span></div>
@@ -146,6 +153,7 @@
                             <div class="actions">
                                 <button class="btn">Detalii</button>
                                 <button class="btn primary">Rezervă</button>
+                                <button class="btn btn-delete" style="display:none;">Șterge</button>
                             </div>
                         </div>
                     </div>
@@ -154,13 +162,14 @@
                 <article class="card" data-title="Casă tradițională" data-city="Sibiu">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNojCs5xgN7jzsdZC6EP1BxsMXFAg1Xsyn0Q&s" alt="Casă tradițională" />
                     <div class="info">
-                        <div class="title">Casă tradițională în centrul vechi</div>
+                        <div class="title">Casă tradițională</div>
                         <div class="meta"><span>Sibiu</span><span>4.8 ★</span></div>
                         <div style="display:flex;justify-content:space-between;align-items:center">
                             <div class="price">250 RON/noapte</div>
                             <div class="actions">
                                 <button class="btn">Detalii</button>
                                 <button class="btn primary">Rezervă</button>
+                                <button class="btn btn-delete" style="display:none;">Șterge</button>
                             </div>
                         </div>
                     </div>
@@ -209,7 +218,7 @@
     </main>
 
     <script>
-        // Small interactive search: filter cards by title or city
+        // --- LOGICA DE CĂUTARE (EXISTENTĂ) ---
         const form = document.getElementById('searchForm');
         const input = document.getElementById('searchInput');
         const listings = Array.from(document.querySelectorAll('#listings .card'));
@@ -248,6 +257,44 @@
             noResults.style.display = visible ? 'none' : '';
             if(visible) window.scrollTo({top:document.querySelector('.section').offsetTop - 20, behavior:'smooth'});
         }
+
+
+        // --- LOGICA LOGIN/LOGOUT ȘI ADMIN (ADĂUGATĂ) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const userRole = localStorage.getItem('userRole');
+            const adminLink = document.getElementById('adminLink');
+            const loginButton = document.getElementById('loginButton');
+            const logoutButton = document.getElementById('logoutButton');
+
+            if (userRole) {
+                // Dacă un utilizator este logat (indiferent de rol)
+                loginButton.style.display = 'none'; // Ascunde "Login"
+                logoutButton.style.display = 'inline-flex'; // Arată "Logout"
+
+                if (userRole === 'admin') {
+                    // Dacă utilizatorul este specific ADMIN
+                    adminLink.style.display = 'inline-block'; // Arată "Panou Admin"
+                    
+                    // Selectează TOATE butoanele de ștergere
+                    const deleteButtons = document.querySelectorAll('.btn-delete');
+                    
+                    // Parcurge-le și fă-le vizibile
+                    deleteButtons.forEach(button => {
+                        button.style.display = 'inline-flex';
+                    });
+                }
+            }
+
+            // Adăugăm funcționalitate pe butonul de Logout
+            logoutButton.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                
+                localStorage.removeItem('userRole'); // Șterge rolul din stocare
+                alert('Ai fost deconectat.');
+                
+                window.location.reload(); // Reîncarcă pagina
+            });
+        });
     </script>
 </body>
-</html></article></div></article></section></div></form>
+</html>
