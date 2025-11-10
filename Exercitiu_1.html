@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercițiul 1</title>
+</head>
+<body>
+    <h1>Exercițiul 1 </h1>
+ 
+    
+
+    <script>
+        let myName = "Mario";
+
+        let mySurname = "Ionita"; 
+
+        let myAge = 21;
+        let studyYear = 3;
+
+        let myHobby = "programarea"; 
+
+        
+        console.log("Vârsta inițială:", myAge);
+        myAge += (25 - myAge);
+        console.log("Vârsta modificată:", myAge);
+
+        console.log("\n--- Varianta cu Concatenare (+) ---");
+        console.log("Buna! Ma numesc " + myName + " " + mySurname + " și am " + myAge + " ani. Sunt la Universitatea\nPolitehnica Bucuresti, în anul " + studyYear + ".\nUnul dintre hobby-urile mele este " + myHobby + ".");
+
+        
+        console.log("\n--- Varianta cu Placeholders");
+        console.log(`Buna! Ma numesc ${myName} ${mySurname} și am ${myAge} ani. Sunt la Universitatea
+Politehnica Bucuresti, în anul ${studyYear}.
+Unul dintre hobby-urile mele este ${myHobby}.`);
+
+        console.log("\n--- Verificarea Tipurilor (typeof) ---");
+        console.log("Tipul variabilei 'myName':", typeof myName);
+
+        console.log("Tipul variabilei 'myAge':", typeof myAge);
+
+        console.log("Tipul variabilei 'myHobby':", typeof myHobby);
+    </script>
+    </body>
+</html>

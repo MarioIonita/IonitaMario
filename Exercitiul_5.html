@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercițiul 5</title>
+</head>
+<body>
+    <h1>Exercițiul 5</h1>
+
+
+    <script>
+        function verificaTriunghi(a, b, c) {
+            console.log(`\n--- Verificare pentru laturile: [${a}, ${b}, ${c}] ---`);
+            
+            if ( (a + b > c) && (a + c > b) && (b + c > a) && a > 0 && b > 0 && c > 0 ) {
+                
+                if (a === b && b === c) {
+                    console.log("Laturile pot forma un triunghi. Tip: Echilateral.");
+                } else if (a === b || a === c || b === c) {
+                    console.log("Laturile pot forma un triunghi. Tip: Isoscel.");
+                } else {
+                    console.log("Laturile pot forma un triunghi. Tip: Oarecare.");
+                }
+
+            } else {
+                console.log("Laturile NU pot forma un triunghi.");
+            }
+        }
+
+
+        verificaTriunghi(10, 10, 10);
+        
+
+    </script>
+
+</body>
+</html>
