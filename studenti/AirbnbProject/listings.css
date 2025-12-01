@@ -15,11 +15,10 @@ body{
     -moz-osx-font-smoothing:grayscale;
 }
 
-/* --- Butoane Filtru/Sortare (modificat) --- */
 .listing-controls {
     display: flex;
-    flex-wrap: wrap; /* Permite trecerea pe rândul următor pe mobil */
-    gap: .5rem; /* Spațiu mai mic între butoane */
+    flex-wrap: wrap; 
+    gap: .5rem; 
     justify-content: center;
     padding: 0 1rem 1rem 1rem;
     max-width: 960px;
@@ -30,16 +29,14 @@ body{
     padding: .6rem 1rem;
     background-color: var(--card);
 }
-/* Stil pentru butonul activ de filtru */
 .listing-controls .btn.active {
     background-color: var(--accent);
     color: white;
 }
 
-/* --- FORMULARUL DE FILTRARE (NOU) --- */
 .filter-container {
     max-width: 960px;
-    margin: 0 auto 1.5rem auto; /* Spațiu sub formular */
+    margin: 0 auto 1.5rem auto; 
     padding: 1.5rem;
     background: var(--card);
     border-radius: 12px;
@@ -67,7 +64,7 @@ body{
     box-sizing: border-box;
 }
 .filter-form .filter-actions {
-    grid-column: 1 / -1; /* Ocupă tot rândul */
+    grid-column: 1 / -1; 
     display: flex;
     gap: 0.5rem;
     margin-top: 0.5rem;
@@ -75,10 +72,8 @@ body{
 .filter-form .filter-actions .btn {
     flex: 1;
 }
-/* ------------------------------------- */
 
 
-/* Containerul listings (Grid, ca pe index) */
 .listings {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -93,7 +88,6 @@ body{
     }
 }
 
-/* Cardurile (identice cu index.css) */
 .card {
     background: var(--card);
     border-radius: 12px;
@@ -133,8 +127,8 @@ body{
     background:transparent;
     font-weight:700;
     cursor:pointer;
-    text-decoration: none; /* Adăugat pentru link-ul button-home */
-    display: inline-flex; /* Adăugat pentru aliniere */
+    text-decoration: none; 
+    display: inline-flex; 
     align-items: center;
     justify-content: center;
 }
@@ -144,7 +138,6 @@ body{
     border:0;
 }
 
-/* Stilul pentru butonul Dezactiveaza */
 .btn.btn-deactivate {
   background-color: #fee2e2;
   border-color: #fca5a5;
@@ -180,24 +173,22 @@ body{
 }
 .card.deactivated {
     opacity: 0.5;
-    pointer-events: none; /* Dezactivează click-urile pe tot cardul (opțional) */
-    border: 3px dashed #6b7280; /* Bordură vizuală */
+    pointer-events: none; 
+    border: 3px dashed #6b7280; 
     box-shadow: none;
     transition: all 0.3s ease;
 }
 .card.deactivated:hover {
-    transform: none; /* Anulează efectul de hover când e dezactivat */
+    transform: none; 
 }
 
-/* Facem doar butoanele din interiorul cardului dezactivat să fie din nou responsive */
 .card.deactivated .actions .btn {
     pointer-events: auto; 
 }
-/* Reimprospătăm butonul de dezactivare când e activat */
 .card.deactivated .btn.btn-deactivate {
     opacity: 1; 
     pointer-events: auto; 
-    background-color: #22c55e; /* Schimbă culoarea la verde pentru "Activează" */
+    background-color: #22c55e; 
     color: white;
     border-color: #22c55e;
 }

@@ -55,7 +55,6 @@ nav a:hover{background:#fff;border:1px solid rgba(15,23,42,.04);color:var(--acce
 .cta{background:var(--accent);color:#fff;padding:.5rem .8rem;border-radius:10px;font-weight:600;box-shadow:0 6px 18px rgba(255,90,95,.12)}
 .container{max-width:1100px;margin:0 auto;padding:1rem}
 
-/* Search hero (mutată sus, dublă) */
 .search-hero{
     margin-top:1rem;
 }
@@ -67,11 +66,11 @@ nav a:hover{background:#fff;border:1px solid rgba(15,23,42,.04);color:var(--acce
     display:flex;
     flex-direction:column;
     gap:1rem;
-    /* "lungime dublă" -> mai bogat spațiu vertical */
+    
     min-height:180px;
 }
 
-/* Hero (păstrat pentru alte conținuturi, neschimbat) */
+
 .hero{
     display:grid;
     grid-template-columns:1fr;
@@ -91,7 +90,6 @@ nav a:hover{background:#fff;border:1px solid rgba(15,23,42,.04);color:var(--acce
 h1{margin:0;font-size:1.6rem}
 p.lead{margin:0;color:var(--muted)}
 
-/* Search */
 .search-bar{
     display:flex;
     gap:.6rem;
@@ -122,13 +120,11 @@ p.lead{margin:0;color:var(--muted)}
     gap:1rem;
     margin-top:1rem;
 }
-/* 2 pe rând — la desktop păstrezi 2 coloane indiferent de breakpoint */
 @media(min-width:680px){
     .grid{grid-template-columns:repeat(2,1fr)}
     .hero{grid-template-columns:1fr 420px}
 }
 @media(min-width:1000px){
-    /* menținem 2 coloane pentru "2 cate 2" cerință */
     .grid{grid-template-columns:repeat(2,1fr)}
 }
 .card{
@@ -152,7 +148,6 @@ p.lead{margin:0;color:var(--muted)}
     padding:1.6rem;text-align:center;color:var(--muted);background:linear-gradient(180deg,#fff,rgba(255,255,255,0.6));border-radius:12px
 }
 
-/* Testimonials & footer */
 .testimonials{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1rem}
 @media(min-width:880px){.testimonials{grid-template-columns:repeat(3,1fr)}}
 .testimonial{background:var(--card);padding:1rem;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.04)}
@@ -174,24 +169,22 @@ small{color:var(--muted)}
 }
 .card.deactivated {
     opacity: 0.5;
-    pointer-events: none; /* Dezactivează click-urile pe tot cardul (opțional) */
-    border: 3px dashed #6b7280; /* Bordură vizuală */
+    pointer-events: none; 
+    border: 3px dashed #6b7280; 
     box-shadow: none;
     transition: all 0.3s ease;
 }
 .card.deactivated:hover {
-    transform: none; /* Anulează efectul de hover când e dezactivat */
+    transform: none; 
 }
 
-/* Facem doar butoanele din interiorul cardului dezactivat să fie din nou responsive */
 .card.deactivated .actions .btn {
     pointer-events: auto; 
 }
-/* Reimprospătăm butonul de dezactivare când e activat */
 .card.deactivated .btn.btn-deactivate {
     opacity: 1; 
     pointer-events: auto; 
-    background-color: #22c55e; /* Schimbă culoarea la verde pentru "Activează" */
+    background-color: #22c55e; 
     color: white;
     border-color: #22c55e;
 }

@@ -1,4 +1,3 @@
-/* Importăm variabilele globale pe care le-ai definit în index.css */
 :root{
     --bg:#f6f7fb;
     --card:#ffffff;
@@ -16,14 +15,13 @@ body {
   background: linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
   color: #0f172a;
-  display: flex; /* Centrare verticală */
+  display: flex; 
   align-items: center;
   justify-content: center;
 }
 
-/* Container centrat */
 .login-container {
-  max-width: 420px; /* Mai îngust pentru login */
+  max-width: 420px; 
   width: 90%;
   margin: 2rem 0;
   background: var(--card);
@@ -32,7 +30,6 @@ body {
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
 }
 
-/* Header-ul formularului */
 .login-header {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -67,7 +64,6 @@ body {
   font-weight: 700;
 }
 
-/* Formularul */
 .login-form {
   display: flex;
   flex-direction: column;
@@ -88,14 +84,13 @@ body {
   background: #fff;
   font-size: 0.95rem;
   outline: none;
-  box-sizing: border-box; /* Adăugat pentru a preveni probleme de padding */
+  box-sizing: border-box; 
 }
 .login-form input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(255, 90, 95, 0.15);
 }
 
-/* Butoane - refolosite din stilul tău */
 .form-actions {
   display: flex;
   gap: .6rem;
@@ -103,7 +98,7 @@ body {
   margin-top: .25rem;
 }
 .btn {
-  flex: 1; /* Butoanele ocupă tot spațiul */
+  flex: 1;
   padding: .7rem .9rem;
   border-radius: 10px;
   border: 1px solid rgba(15, 23, 42, 0.06);
