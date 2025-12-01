@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — LocuriAcasa</title>
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+
+  <main class="login-container">
+    <header class="login-header">
+      <a class="brand" href="index.html">
+        <div class="logo">LA</div>
+        <div style="font-weight:700">LocuriAcasa</div>
+      </a>
+      <h1>Autentificare</h1>
+      <p class="lead">Intră în cont pentru a-ți gestiona rezervările.</p>
+    </header>
+
+    <form id="loginForm" class="login-form">
+      
+      <label>
+        Email
+        <input type="email" id="email" name="email" placeholder="adresa@exemplu.com" required>
+      </label>
+
+      <label>
+        Parolă
+        <input type="password" id="password" name="password" placeholder="••••••••" required>
+      </label>
+
+      <div class="form-actions">
+        <button type="submit" class="btn primary">Intră în cont</button>
+        <a href="index.html" class="btn outline">Anulează</a>
+      </div>
+
+      <p class="muted-link">Nu ai cont? <a href="#">Înregistrează-te</a></p>
+    </form>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.getElementById('loginForm');
+      const emailInput = document.getElementById('email');
+      
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault(); 
+        
+        const email = emailInput.value.trim();
+        
+       
+
+        if (email === 'admin@locuriacasa.ro') {
+          alert('Autentificare reușită ca ADMIN! Redirecționare...');
+          localStorage.setItem('userRole', 'admin');
+          window.location.href = 'index.html'; 
+
+        } else if (email) {
+          alert('Autentificare reușită! Redirecționare...');
+          localStorage.setItem('userRole', 'user');
+          window.location.href = 'index.html'; 
+          
+        } else {
+          alert('Te rugăm să introduci emailul și parola.');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

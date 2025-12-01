@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Suport — AirbnbProject</title>
+  <link rel="stylesheet" href="support.css" />
+</head>
+<body>
+  <main class="support-container">
+    <header class="support-header">
+      <h1>Suport & Ajutor</h1>
+      <p class="lead">Ai o întrebare sau ai nevoie de ajutor? Trimite-ne un tichet sau consultă FAQ.</p>
+    </header>
+
+    <section class="contact-cards">
+      <div class="contact-card">
+        <h3>Contact rapid</h3>
+        <p class="muted">Email</p>
+        <a href="mailto:support@airbnbproject.com" class="contact-link">support@airbnbproject.com</a>
+        <p class="muted">Telefon</p>
+        <a href="tel:+40123456789" class="contact-link">+40 123 456 789</a>
+        <p class="muted">Program</p>
+        <p>Lu–Vi: 09:00 — 18:00</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Resurse utile</h3>
+        <ul class="links">
+          <li><a href="#">Cum rezerv — ghid rapid</a></li>
+          <li><a href="#">Politica anulare</a></li>
+          <li><a href="#">Securitate & Plăți</a></li>
+        </ul>
+      </div>
+
+      <div class="contact-card">
+        <h3>Asistență prioritară</h3>
+        <p class="muted">Probleme grave (plată, securitate)</p>
+        <p>Trimite subiectul cu <strong>URGENT</strong> în subiectul email-ului.</p>
+      </div>
+    </section>
+
+    <section class="faq">
+      <h2>Întrebări frecvente</h2>
+      <details>
+        <summary>Cum îmi anulez rezervarea?</summary>
+        <p>Accesează profil → Rezervări → Detalii rezervare → Anulează. Politica de anulare depinde de gazdă.</p>
+      </details>
+      <details>
+        <summary>Cum modific o rezervare?</summary>
+        <p>Contactează gazda din pagina rezervării sau trimite-ne un tichet cu ID-ul rezervării.</p>
+      </details>
+      <details>
+        <summary>Pot solicita rambursare?</summary>
+        <p>Rambursările se procesează conform politicii de anulare; noi îți vom oferi detalii după verificare.</p>
+      </details>
+    </section>
+
+    <section class="ticket">
+      <h2>Trimite un tichet</h2>
+      <form class="ticket-form" action="#" method="post" onsubmit="alert('Tichet trimis (demo).'); return false;">
+        <label>
+          Nume
+          <input type="text" name="name" placeholder="Prenume Nume" required>
+        </label>
+
+        <label>
+          Email
+          <input type="email" name="email" placeholder="adresa@exemplu.com" required>
+        </label>
+
+        <label>
+          Tip problemă
+          <select name="type" required>
+            <option value="">— Alege —</option>
+            <option>Plată</option>
+            <option>Rezervare</option>
+            <option>Cont</option>
+            <option>Altceva</option>
+          </select>
+        </label>
+
+        <label>
+          Descriere
+          <textarea name="message" rows="5" placeholder="Descrie problema..." required></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn primary">Trimite tichet</button>
+          <a href="index.html" class="btn outline">Anulează / Home</a>
+        </div>
+      </form>
+    </section>
+
+    <footer class="support-footer">
+      <small>© AirbnbProject • Suport disponibil în orele lucrătoare</small>
+    </footer>
+  </main>
+</body>
+</html>

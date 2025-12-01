@@ -1,0 +1,106 @@
+/* Reset și fonturi de bază */
+:root {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #222;
+    --primary-color: #0366d6;
+    --bg-color: #f7f7f8;
+    --card-bg: #fff;
+    --card-shadow: rgba(20, 20, 40, 0.08);
+}
+
+/* Body și layout general */
+body {
+    margin: 0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--bg-color);
+}
+
+/* Card central */
+.card {
+    max-width: 680px;
+    width: 100%;
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px var(--card-shadow);
+    text-align: center;
+}
+
+/* Titluri */
+h1 {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+}
+
+h2 {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: #444;
+}
+
+/* Paragraf */
+p {
+    margin: 0.5rem 0 1rem 0;
+}
+
+/* Link-uri normale */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Buton pentru acasa */
+.button-home {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.65rem 1.3rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #fff;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.button-home:hover {
+    background-color: #024ea2;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+
+/* Footer */
+footer {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Listă simplă */
+ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    text-align: left;
+}
+
+li {
+    margin-bottom: 0.25rem;
+}
+
+/* Time styling */
+time {
+    font-style: normal;
+    color: #555;
+}

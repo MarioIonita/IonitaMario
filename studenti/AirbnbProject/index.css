@@ -1,0 +1,200 @@
+:root{
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --muted:#6b7280;
+    --accent:#ff5a5f;
+    --accent-600:#ff3b3f;
+    --glass: rgba(255,255,255,0.6);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    background:linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
+    color:#0f172a;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+}
+
+/* Header */
+header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    padding:1rem 1.25rem;
+    background:transparent;
+    position:sticky;
+    top:0;
+    z-index:20;
+    backdrop-filter: blur(6px);
+}
+.brand{
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    text-decoration:none;
+    color:inherit;
+}
+.logo{
+    width:40px;height:40px;border-radius:10px;
+    background:linear-gradient(135deg,var(--accent),#ff8a8d);
+    display:flex;align-items:center;justify-content:center;color:white;font-weight:700;
+    box-shadow:0 6px 18px rgba(255,90,95,0.12);
+}
+nav{display:flex;gap:.6rem;align-items:center}
+nav a{
+    color:var(--muted);
+    text-decoration:none;
+    font-weight:600;
+    padding:.4rem .6rem;
+    border-radius:8px;
+    transition:all .18s ease;
+}
+nav a:hover{background:#fff;border:1px solid rgba(15,23,42,.04);color:var(--accent-600)}
+.cta{background:var(--accent);color:#fff;padding:.5rem .8rem;border-radius:10px;font-weight:600;box-shadow:0 6px 18px rgba(255,90,95,.12)}
+.container{max-width:1100px;margin:0 auto;padding:1rem}
+
+/* Search hero (mutată sus, dublă) */
+.search-hero{
+    margin-top:1rem;
+}
+.search-hero-card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
+    border-radius:16px;
+    padding:1.4rem;
+    box-shadow:0 10px 40px rgba(15,23,42,0.06);
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+    /* "lungime dublă" -> mai bogat spațiu vertical */
+    min-height:180px;
+}
+
+/* Hero (păstrat pentru alte conținuturi, neschimbat) */
+.hero{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1.25rem;
+    align-items:center;
+    padding:1.25rem 0;
+}
+.hero-card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.75));
+    border-radius:16px;
+    padding:1.25rem;
+    box-shadow:0 8px 30px rgba(15,23,42,0.06);
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+}
+h1{margin:0;font-size:1.6rem}
+p.lead{margin:0;color:var(--muted)}
+
+/* Search */
+.search-bar{
+    display:flex;
+    gap:.6rem;
+    align-items:center;
+    margin-top:.6rem;
+}
+.search-bar.large input{
+    height:56px;
+    padding:1rem 1.1rem;
+    font-size:1.05rem;
+    border-radius:14px;
+}
+.search-bar input{
+    flex:1;padding:.8rem 1rem;border-radius:12px;border:1px solid rgba(15,23,42,.06);
+    background:transparent;outline:none;font-weight:600;
+}
+.search-bar button{
+    background:var(--accent);color:white;padding:.8rem 1rem;border-radius:12px;border:0;font-weight:700;cursor:pointer;
+}
+
+/* Cards grid */
+.section{
+    margin-top:1.25rem;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(1,1fr);
+    gap:1rem;
+    margin-top:1rem;
+}
+/* 2 pe rând — la desktop păstrezi 2 coloane indiferent de breakpoint */
+@media(min-width:680px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .hero{grid-template-columns:1fr 420px}
+}
+@media(min-width:1000px){
+    /* menținem 2 coloane pentru "2 cate 2" cerință */
+    .grid{grid-template-columns:repeat(2,1fr)}
+}
+.card{
+    background:var(--card);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 8px 26px rgba(15,23,42,0.06);
+    display:flex;
+    flex-direction:column;
+}
+.card img{width:100%;height:180px;object-fit:cover;display:block}
+.card .info{padding:.9rem;display:flex;flex-direction:column;gap:.5rem}
+.meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-weight:600}
+.title{font-weight:700}
+.price{color:var(--accent-600);font-weight:800}
+.actions{display:flex;gap:.5rem;margin-top:.6rem}
+.btn{flex:1;padding:.6rem .7rem;border-radius:10px;border:1px solid rgba(15,23,42,.06);background:transparent;font-weight:700;cursor:pointer}
+.btn.primary{background:var(--accent);color:white;border:0}
+
+.empty{
+    padding:1.6rem;text-align:center;color:var(--muted);background:linear-gradient(180deg,#fff,rgba(255,255,255,0.6));border-radius:12px
+}
+
+/* Testimonials & footer */
+.testimonials{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1rem}
+@media(min-width:880px){.testimonials{grid-template-columns:repeat(3,1fr)}}
+.testimonial{background:var(--card);padding:1rem;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.04)}
+footer{margin-top:1.2rem;padding:1.2rem 0;color:var(--muted);font-size:.95rem}
+footer .foot-grid{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:space-between}
+
+small{color:var(--muted)}
+
+.btn.btn-deactivate {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+  flex: 0.5; 
+}
+.btn.btn-deactivate:hover {
+  background-color: #b91c1c;
+  color: #fff;
+  border-color: #b91c1c;
+}
+.card.deactivated {
+    opacity: 0.5;
+    pointer-events: none; /* Dezactivează click-urile pe tot cardul (opțional) */
+    border: 3px dashed #6b7280; /* Bordură vizuală */
+    box-shadow: none;
+    transition: all 0.3s ease;
+}
+.card.deactivated:hover {
+    transform: none; /* Anulează efectul de hover când e dezactivat */
+}
+
+/* Facem doar butoanele din interiorul cardului dezactivat să fie din nou responsive */
+.card.deactivated .actions .btn {
+    pointer-events: auto; 
+}
+/* Reimprospătăm butonul de dezactivare când e activat */
+.card.deactivated .btn.btn-deactivate {
+    opacity: 1; 
+    pointer-events: auto; 
+    background-color: #22c55e; /* Schimbă culoarea la verde pentru "Activează" */
+    color: white;
+    border-color: #22c55e;
+}
+.card.deactivated .btn.btn-deactivate:hover {
+    background-color: #16a34a;
+}
