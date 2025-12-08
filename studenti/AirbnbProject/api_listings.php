@@ -4,27 +4,16 @@ header('Content-Type: application/json');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+require 'db.php'; 
 
-require 'db_connect.php';
+try {
+    $stmt = $pdo->query("SELECT * FROM listings");
+    $anunturi = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = "SELECT * FROM listings";
+    echo json_encode($anunturi, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
-$result = $conn->query($sql);
-
-$anunturi = [];
-
-if ($result) {
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            $anunturi[] = $row;
-        }
-    }
-} else {
-    echo json_encode(["error" => "Eroare SQL: " . $conn->error]);
-    exit;
+} catch (PDOException $e) {
+    echo json_encode([
+        "error" => "Eroare SQL: " . $e->getMessage()
+    ]);
 }
-
-echo json_encode($anunturi, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-
-$conn->close();
-?>
