@@ -48,7 +48,7 @@
         </section>
 
         <p style="text-align:center;">
-            <a href="index.html" class="button-home" rel="noopener">Home</a>
+            <a href="index.php" class="button-home" rel="noopener">Home</a>
         </p>
     </main>
 </body>

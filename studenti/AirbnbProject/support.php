@@ -87,7 +87,7 @@
 
         <div class="form-actions">
           <button type="submit" class="btn primary">Trimite tichet</button>
-          <a href="index.html" class="btn outline">Anulează / Home</a>
+          <a href="index.php" class="btn outline">Anulează / Home</a>
         </div>
       </form>
     </section>

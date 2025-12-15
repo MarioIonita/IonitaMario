@@ -107,7 +107,7 @@
         </section>
 
         <p style="text-align:center;">
-            <a href="index.html" class="button-home" rel="noopener">Home</a>
+            <a href="index.php" class="button-home" rel="noopener">Home</a>
         </p>
     </main>
 
@@ -231,7 +231,7 @@
         }
 
 
-        // --- Logica de Admin (Spre deosebire de index.html, aici doar atașăm funcția) ---
+        // --- Logica de Admin (Spre deosebire de index.php, aici doar atașăm funcția) ---
         const userRole = localStorage.getItem('userRole');
 
         if (userRole === 'admin') {

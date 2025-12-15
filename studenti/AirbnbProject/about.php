@@ -24,7 +24,7 @@
             <p><time datetime="2025-10-13">October 13, 2025</time></p>
         </section>
 
-        <p><a href="index.html" class="button-home" rel="noopener">← Home</a></p>
+        <p><a href="index.php" class="button-home" rel="noopener">← Home</a></p>
     </main>
 
     <footer role="contentinfo">
