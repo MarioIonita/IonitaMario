@@ -1,0 +1,89 @@
+/* details.css - REPARAT DEFINITIV */
+
+/* 1. CONTAINERUL PRINCIPAL (Rama fixă) */
+.swiper.mySwiper {
+    width: 100%;
+    height: 500px !important; /* ÎNĂLȚIME FIXĂ - Modifică aici dacă vrei mai mic/mare */
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    background-color: #e0e0e0;
+    overflow: hidden; /* Orice depășește se taie */
+}
+
+/* 2. SLIDE-UL (Trebuie să umple rama) */
+.swiper-slide {
+    width: 100% !important;
+    height: 100% !important; /* Umple cei 500px ai părintelui */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 3. IMAGINEA (Trebuie să se supună ramei) */
+.swiper-slide img {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    
+    /* CHEIA SUCCESULUI: */
+    object-fit: cover; /* Taie marginile pozei ca să umple perfect rama */
+    object-position: center; /* Centrează imaginea tăiată */
+}
+
+/* Ajustare pentru mobil */
+@media (max-width: 768px) {
+    .swiper.mySwiper {
+        height: 300px !important; /* Pe telefon o facem mai mică */
+    }
+}
+
+/* --- Restul stilurilor rămân neschimbate --- */
+.details-container {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr; 
+    gap: 3rem;
+}
+
+/* Personalizare culori săgeți și puncte (paginare) Swiper */
+:root {
+    --swiper-theme-color: #ff385c; /* Folosim culoarea brandului */
+    --swiper-navigation-size: 30px; /* Săgeți puțin mai fine */
+}
+
+/* --- RESTUL STILURILOR (Layout General) --- */
+.details-container {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr; 
+    gap: 3rem;
+}
+
+.booking-card {
+    border: 1px solid #ddd;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    position: sticky;
+    top: 100px;
+    background: white;
+    z-index: 10; /* Să fie peste alte elemente la scroll */
+}
+
+.tag {
+    background: #f7f7f7;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+}
+
+/* Stiluri Calendar Flatpickr */
+.flatpickr-calendar {
+    font-family: 'Inter', sans-serif;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+    .details-container { grid-template-columns: 1fr; }
+    .swiper.mySwiper { height: 300px; /* Mai mic pe mobil */ }
+}

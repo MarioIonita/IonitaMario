@@ -48,9 +48,6 @@ a {
     text-decoration: none;
 }
 
-a:hover {
-    text-decoration: underline;
-}
 
 .button-home {
     display: inline-block;
@@ -94,3 +91,4 @@ time {
     font-style: normal;
     color: #555;
 }
+    

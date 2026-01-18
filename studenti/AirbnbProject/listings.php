@@ -1,271 +1,243 @@
+<?php
+session_start();
+require 'db.php';
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listings — AirbnbProject</title>
+    <title>Listings — HomeEverywhere</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="listings.css">
+    <link rel="stylesheet" href="index.css"> 
 </head>
 <body>
-    <main role="main">
-        <h1 style="text-align:center;margin-top:2rem;">Listings</h1>
+    <header>
+        <div class="container" style="display:flex;align-items:center;gap:1rem">
+            <a class="brand" href="index.php">
+                <div class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white;">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-weight:700">HomeEverywhere</div>
+                    <small style="color:var(--muted)">Cazări & experiențe</small>
+                </div>
+            </a>
 
-        <div class="listing-controls">
+                            <nav style="margin-left:auto; display:flex; align-items:center;">
+                                <a href="about.php">Despre</a>
+                                <a href="listings.php">Anunțuri</a>
+                                <a href="support.php">Suport</a> <?php if (isset($_SESSION['user_id'])): ?>
+                                    
+                                    <a href="upload.php" class="btn-publish">Publică Anunț</a>
+                                    
+                                    <a class="cta" href="logout.php" style="background-color:var(--muted); margin-left:15px;" title="Ieși din cont">
+                                        Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)
+                                    </a>
+
+                                <?php else: ?>
+                                    <a class="cta" href="login.php">Login / Publică</a>
+                                <?php endif; ?>
+                            </nav>
+        </div>
+    </header>
+
+    <main role="main" class="container">
+        <h1 style="text-align:center;margin-top:2rem;">Toate Anunțurile</h1>
+
+        <div class="listing-controls" style="text-align:center; margin-bottom:2rem;">
             <button class="btn" id="filterToggleBtn">Filtrează</button>
             <button class="btn" id="sortAscBtn">Sortează (Preț Cresc.)</button>
             <button class="btn" id="sortDescBtn">Sortează (Preț Desc.)</button>
         </div>
 
-        <section id="filterFormContainer" class="filter-container" style="display: none;">
-            <form id="filterForm" class_="filter-form">
+        <section id="filterFormContainer" class="filter-container" style="display: none; background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <form id="filterForm" class="filter-form" style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; align-items: flex-end;">
                 <div>
-                    <label for="minPrice">Preț Minim (RON)</label>
-                    <input type="number" id="minPrice" placeholder="0">
+                    <label for="minPrice" style="display:block; margin-bottom:0.5rem; font-size:0.9rem;">Preț Minim</label>
+                    <input type="number" id="minPrice" placeholder="0" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
                 </div>
                 <div>
-                    <label for="maxPrice">Preț Maxim (RON)</label>
-                    <input type="number" id="maxPrice" placeholder="1000">
+                    <label for="maxPrice" style="display:block; margin-bottom:0.5rem; font-size:0.9rem;">Preț Maxim</label>
+                    <input type="number" id="maxPrice" placeholder="1000" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
                 </div>
                 <div>
-                    <label for="citySelect">Oraș</label>
-                    <select id="citySelect">
+                    <label for="citySelect" style="display:block; margin-bottom:0.5rem; font-size:0.9rem;">Oraș</label>
+                    <select id="citySelect" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; min-width: 150px;">
                         <option value="">Toate orașele</option>
-                        </select>
+                    </select>
                 </div>
                 <div class="filter-actions">
-                    <button type="button" id="applyFilterBtn" class="btn primary">Aplică Filtre</button>
-                    <button type="button" id="resetFilterBtn" class="btn">Resetează</button>
+                    <button type="button" id="applyFilterBtn" class="btn primary">Aplică</button>
+                    <button type="button" id="resetFilterBtn" class="btn">Reset</button>
                 </div>
             </form>
         </section>
 
-        <section class="listings">
-            <article class="card" data-city="Brașov" data-price="220">
-                <img src="https://www.romanian-adventures.ro/uploads/images/casa_clementina_brasov_2.jpeg" alt="Casa din munte" />
-                <div class="info">
-                    <div class="title">Casa cu grădină</div>
-                    <div class="meta"><span>Brașov</span><span style="color:var(--muted)">4.9 ★</span></div>
-                    <div style="display:flex;justify-content:space-between;align-items:center">
-                        <div class="price">220 RON/noapte</div>
-                        <div class="actions">
-                            <button class="btn">Detalii</button>
-                            <button class="btn primary">Rezervă</button>
-                            <button class="btn btn-deactivate" style="display:none;">Dezactivează</button>
-                        </div>
-                    </div>
-                </div>
-            </article>
+        <section class="listings grid" id="listingsContainer">
+            <?php
+            // Logică SQL
+            $sql = "SELECT * FROM listings WHERE is_active = 1";
+            if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) {
+                $sql = "SELECT * FROM listings";
+            }
 
-            <article class="card" data-city="București" data-price="320">
-                <img src="https://www.nobili-interior-design.ro/storage/posts/418/900_design_interior_apartament_modern_in_bucuresti_2.jpg" alt="Apartament modern" />
-                <div class="info">
-                    <div class="title">Apartament modern în București</div>
-                    <div class="meta"><span>București</span><span>4.8 ★</span></div>
-                    <div style="display:flex;justify-content:space-between;align-items:center">
-                        <div class="price">320 RON/noapte</div>
-                        <div class="actions">
-                            <button class="btn">Detalii</button>
-                            <button class="btn primary">Rezervă</button>
-                            <button class="btn btn-deactivate" style="display:none;">Dezactivează</button>
-                        </div>
-                    </div>
-                </div>
-            </article>
+            try {
+                $stmt = $pdo->query($sql);
+                $all_listings = $stmt->fetchAll();
+            } catch (Exception $e) {
+                $all_listings = [];
+                echo "<p style='text-align:center'>Eroare conexiune: " . $e->getMessage() . "</p>";
+            }
 
-            <article class="card" data-city="Cluj" data-price="280">
-                <img src="https://hotnews.ro/wp-content/uploads/2024/04/image-2022-02-18-25374024-41-garsoniera-11.jpg" alt="Loft" />
-                <div class="info">
-                    <div class="title">Garsoniera centrală</div>
-                    <div class="meta"><span>Cluj</span><span>4.7 ★</span></div>
-                    <div style="display:flex;justify-content:space-between;align-items:center">
-                        <div class="price">280 RON/noapte</div>
-                        <div class="actions">
-                            <button class="btn">Detalii</button>
-                            <button class="btn primary">Rezervă</button>
-                            <button class="btn btn-deactivate" style="display:none;">Dezactivează</button>
-                        </div>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="card" data-city="Brașov" data-price="450">
-                <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/186728929.jpg?k=3e1399683302c9b89480a9e61da76eb6f5d07ecaa6142fac74b47c3525c29ea1&o=&hp=1" alt="Studio" />
-                <div class="info">
-                    <div class="title">Studio de lux</div>
-                    <div class="meta"><span>Brașov</span><span>5.0 ★</span></div>
-                    <div style="display:flex;justify-content:space-between;align-items:center">
-                        <div class="price">450 RON/noapte</div>
-                        <div class="actions">
-                            <button class="btn">Detalii</button>
-                            <button class="btn primary">Rezervă</button>
-                            <button class="btn btn-deactivate" style="display:none;">Dezactivează</button>
-                        </div>
-                    </div>
-                </div>
-            </article>
+            if (empty($all_listings)) {
+                echo "<p style='text-align:center'>Nu există anunțuri.</p>";
+            }
 
+            foreach ($all_listings as $row): 
+                $isActive = $row['is_active']; 
+                $cssClass = ($isActive == 0) ? 'card deactivated' : 'card';
+                $btnText = ($isActive == 0) ? 'Activează' : 'Dezactivează';
+            ?>
+                <article class="<?php echo $cssClass; ?>" 
+                         data-id="<?php echo $row['id']; ?>" 
+                         data-city="<?php echo htmlspecialchars($row['city']); ?>" 
+                         data-price="<?php echo $row['price']; ?>"
+                         data-title="<?php echo htmlspecialchars($row['title']); ?>">
+                    
+                    <div class="img-ratio-box">
+                        <img src="<?php echo htmlspecialchars($row['image_url']); ?>" alt="Cazare" class="standard-img" />
+                    </div>
+                    
+                    <div class="info">
+                        <div class="title"><?php echo htmlspecialchars($row['title']); ?></div>
+                        <div class="meta">
+                            <span><?php echo htmlspecialchars($row['city']); ?></span>
+                            <span <?php echo number_format($row['rating'], 1); ?></span>
+                        </div>
+                        
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <div class="price"><?php echo $row['price']; ?> RON/noapte</div>
+                            <div class="actions">
+                                <a href="details.php?id=<?php echo $row['id']; ?>" class="btn">Detalii</a>
+                                <a href="details.php?id=<?php echo $row['id']; ?>#rezerva" class="btn primary">
+    Rezervă
+</a>
+                                
+                                <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
+                                    <button class="btn btn-deactivate"><?php echo $btnText; ?></button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            <?php endforeach; ?>
         </section>
 
-        <p style="text-align:center;">
-            <a href="index.php" class="button-home" rel="noopener">Home</a>
+        <p style="text-align:center; margin-top: 2rem;">
+            <a href="index.php" class="btn">Înapoi</a>
         </p>
     </main>
 
+    <footer style="text-align:center; padding:2rem; color:#666; font-size:0.9rem; margin-top:auto;">
+    © 2026 HomeEverywhere
+</footer>
+
     <script>
-    // --- Funcție nouă: Handle Deactivate ---
+    // 1. Funcția de Dezactivare (Backend)
     function handleDeactivation(event) {
-        // Găsește cel mai apropiat părinte cu clasa 'card'
-        const card = event.target.closest('.card'); 
-        
-        if (card) {
-            // Toggle-ul stării
-            const isDeactivated = card.classList.toggle('deactivated');
-            
-            // Actualizarea textului butonului
-            event.target.textContent = isDeactivated ? 'Activează' : 'Dezactivează';
+        const card = event.target.closest('.card');
+        if (!card) return;
 
-            // Setăm starea în DOM (important pentru persistență la reload/filtrare)
-            card.dataset.status = isDeactivated ? 'deactivated' : '';
-            
-            // Opțional: alertă de feedback
-            alert(`Anunțul '${card.querySelector('.title').textContent}' a fost ${isDeactivated ? 'dezactivat (soft deleted)' : 'reactivat'}.`);
-        }
+        const listingId = card.getAttribute('data-id'); 
+        const isCurrentlyDeactivated = card.classList.contains('deactivated');
+        const newState = isCurrentlyDeactivated ? 'active' : 'deactivated'; 
+
+        fetch('toggle_listing.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: listingId, status: newState })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const isDeactivated = card.classList.toggle('deactivated');
+                event.target.textContent = isDeactivated ? 'Activează' : 'Dezactivează';
+                alert('Status actualizat permanent!');
+            } else {
+                alert('Eroare la server.');
+            }
+        })
+        .catch(err => console.error('Eroare:', err));
     }
-    
+
     document.addEventListener('DOMContentLoaded', () => {
+        const listingsContainer = document.getElementById('listingsContainer');
+        const allCards = Array.from(document.querySelectorAll('.card'));
         
-        // --- Variabile și Inițializare ---
-        const listingsContainer = document.querySelector('.listings');
-        // Selectăm TOATE cardurile de la început
-        const allCards = Array.from(document.querySelectorAll('.listings .card'));
-        
-        // Creăm un array de obiecte cu datele, pentru a sorta mai ușor
-        let cardData = allCards.map(card => {
-            return {
-                element: card, // Referința la Nodul DOM
-                city: card.dataset.city,
-                price: parseInt(card.dataset.price, 10), // Convertim prețul în număr
-                status: card.dataset.status || ''
-            };
+        // Data mapping
+        let cardData = allCards.map(card => ({
+            element: card,
+            city: card.dataset.city,
+            price: parseInt(card.dataset.price, 10),
+            title: card.dataset.title
+        }));
+
+        // Activare butoane Admin
+        document.querySelectorAll('.btn-deactivate').forEach(btn => {
+            btn.addEventListener('click', handleDeactivation);
         });
 
-        // Elementele din formular
-        const filterToggleBtn = document.getElementById('filterToggleBtn');
-        const filterFormContainer = document.getElementById('filterFormContainer');
-        const applyFilterBtn = document.getElementById('applyFilterBtn');
-        const resetFilterBtn = document.getElementById('resetFilterBtn');
+        // Setare An Footer
+        const yearEl = document.getElementById('year');
+        if(yearEl) yearEl.textContent = new Date().getFullYear();
+
+        // --- Logica Filtrare ---
         const citySelect = document.getElementById('citySelect');
-        const minPriceInput = document.getElementById('minPrice');
-        const maxPriceInput = document.getElementById('maxPrice');
-        
-        // Elementele de sortare
-        const sortAscBtn = document.getElementById('sortAscBtn');
-        const sortDescBtn = document.getElementById('sortDescBtn');
-
-        // --- Funcții ---
-
-        // 1. Populează dinamic filtrul de orașe
-        function populateCityFilter() {
-            // Găsește orașe unice din cardurile existente
-            const cities = [...new Set(cardData.map(c => c.city))];
-            cities.sort(); // Sortează alfabetic
-            cities.forEach(city => {
-                const option = document.createElement('option');
-                option.value = city;
-                option.textContent = city;
-                citySelect.appendChild(option);
-            });
-        }
-
-        // 2. Funcția de aplicare a filtrelor
-        function applyFilters() {
-            const minPrice = parseInt(minPriceInput.value, 10) || 0; // 0 dacă e gol
-            const maxPrice = parseInt(maxPriceInput.value, 10) || Infinity; // Infinit dacă e gol
-            const selectedCity = citySelect.value;
-
-            // Parcurge array-ul de date și arată/ascunde elementele
-            cardData.forEach(card => {
-                let isVisible = true;
-
-                // Verifică prețul
-                if (card.price < minPrice || card.price > maxPrice) {
-                    isVisible = false;
-                }
-
-                // Verifică orașul (dacă e selectat unul)
-                if (selectedCity && card.city !== selectedCity) {
-                    isVisible = false;
-                }
-
-                // Aplică vizibilitatea
-                card.element.style.display = isVisible ? '' : 'none';
-            });
-        }
-        
-        // 3. Funcția de sortare
-        function sortListings(direction) {
-            // Sortează array-ul de date
-            cardData.sort((a, b) => {
-                if (direction === 'asc') {
-                    return a.price - b.price; // Crescător
-                } else {
-                    return b.price - a.price; // Descrescător
-                }
-            });
-
-            // Golește containerul
-            listingsContainer.innerHTML = '';
-
-            // Re-adaugă elementele în container în ordinea sortată
-            cardData.forEach(card => {
-                listingsContainer.appendChild(card.element);
-            });
-        }
-        
-        // 4. Resetare filtre
-        function resetFilters() {
-            minPriceInput.value = '';
-            maxPriceInput.value = '';
-            citySelect.value = '';
-            applyFilters(); // Re-aplică filtrele (care acum sunt goale)
-        }
-
-
-        // --- Logica de Admin (Spre deosebire de index.php, aici doar atașăm funcția) ---
-        const userRole = localStorage.getItem('userRole');
-
-        if (userRole === 'admin') {
-            // Selectează TOATE butoanele de dezactivare
-            const deactivateButtons = document.querySelectorAll('.btn-deactivate');
-            
-            deactivateButtons.forEach(button => {
-                // 1. Fă butoanele vizibile
-                button.style.display = 'inline-flex';
-                // 2. ATAȘEAZĂ EVENT LISTENERUL NOU
-                button.addEventListener('click', handleDeactivation); 
-            });
-        }
-
-        // --- Inițializare și Event Listeners ---
-        
-        populateCityFilter(); // Populează orașele la încărcarea paginii
-
-        // Afișează/ascunde formularul de filtru
-        filterToggleBtn.addEventListener('click', () => {
-            const isHidden = filterFormContainer.style.display === 'none';
-            filterFormContainer.style.display = isHidden ? 'block' : 'none';
-            filterToggleBtn.classList.toggle('active', isHidden);
+        const cities = [...new Set(cardData.map(c => c.city))].sort();
+        cities.forEach(city => {
+            const opt = document.createElement('option');
+            opt.value = city;
+            opt.textContent = city;
+            citySelect.appendChild(opt);
         });
 
-        // Butoane formular
-        applyFilterBtn.addEventListener('click', applyFilters);
-        resetFilterBtn.addEventListener('click', resetFilters);
-        
-        // Butoane sortare
-        sortAscBtn.addEventListener('click', () => sortListings('asc'));
-        sortDescBtn.addEventListener('click', () => sortListings('desc'));
+        document.getElementById('applyFilterBtn').addEventListener('click', () => {
+            const min = parseInt(document.getElementById('minPrice').value) || 0;
+            const max = parseInt(document.getElementById('maxPrice').value) || Infinity;
+            const city = citySelect.value;
 
+            cardData.forEach(card => {
+                const matchPrice = card.price >= min && card.price <= max;
+                const matchCity = !city || card.city === city;
+                card.element.style.display = (matchPrice && matchCity) ? '' : 'none';
+            });
+        });
+
+        document.getElementById('resetFilterBtn').addEventListener('click', () => {
+            document.getElementById('filterForm').reset();
+            cardData.forEach(c => c.element.style.display = '');
+        });
+
+        // --- Logica Sortare ---
+        function sortListings(dir) {
+            cardData.sort((a, b) => (dir === 'asc' ? a.price - b.price : b.price - a.price));
+            listingsContainer.innerHTML = '';
+            cardData.forEach(c => listingsContainer.appendChild(c.element));
+        }
+
+        document.getElementById('sortAscBtn').addEventListener('click', () => sortListings('asc'));
+        document.getElementById('sortDescBtn').addEventListener('click', () => sortListings('desc'));
+
+        document.getElementById('filterToggleBtn').addEventListener('click', () => {
+            const container = document.getElementById('filterFormContainer');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        });
     });
-</script>
+    </script>
 </body>
-</html> 
+</html>

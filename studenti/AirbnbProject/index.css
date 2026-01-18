@@ -1,3 +1,42 @@
+
+:root {
+    /* Definim proporția: înălțimea va fi 66.66% din lățime (adică 2/3) */
+    --standard-aspect-ratio: 66.66%; 
+    --image-radius: 12px; /* Rotunjire standard peste tot */
+}
+
+/* 1. RAMA FOTO (Containerul) */
+/* Această clasă va forța orice container să aibă proporția fixă */
+.img-ratio-box {
+    position: relative;
+    width: 100%;
+    /* Truc CSS: padding-bottom procentual se raportează la lățime. 
+       Asta creează spațiul vertical înainte să se încarce poza. */
+    padding-bottom: var(--standard-aspect-ratio); 
+    background-color: #e0e0e0; /* Gri placeholder până se încarcă imaginea */
+    border-radius: var(--image-radius);
+    overflow: hidden; /* Taie tot ce depășește rama */
+}
+
+/* 2. POZA DIN INTERIOR */
+/* Orice imagine pusă în această ramă se va adapta perfect */
+.img-ratio-box img.standard-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 'cover' este cheia: umple rama tăind excesul, nu deformează */
+    object-fit: cover; 
+    object-position: center; /* Centrează imaginea */
+    transition: transform 0.3s ease; /* Pregătim un mic zoom la hover */
+}
+
+/* Opțional: Efect de zoom fin la hover pe carduri */
+.card:hover .img-ratio-box img.standard-img {
+    transform: scale(1.05);
+}
+
 :root{
     --bg:#f6f7fb;
     --card:#ffffff;
@@ -141,8 +180,7 @@ p.lead{margin:0;color:var(--muted)}
 .title{font-weight:700}
 .price{color:var(--accent-600);font-weight:800}
 .actions{display:flex;gap:.5rem;margin-top:.6rem}
-.btn{flex:1;padding:.6rem .7rem;border-radius:10px;border:1px solid rgba(15,23,42,.06);background:transparent;font-weight:700;cursor:pointer}
-.btn.primary{background:var(--accent);color:white;border:0}
+
 
 .empty{
     padding:1.6rem;text-align:center;color:var(--muted);background:linear-gradient(180deg,#fff,rgba(255,255,255,0.6));border-radius:12px
@@ -156,17 +194,6 @@ footer .foot-grid{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justif
 
 small{color:var(--muted)}
 
-.btn.btn-deactivate {
-  background-color: #fee2e2;
-  border-color: #fca5a5;
-  color: #b91c1c;
-  flex: 0.5; 
-}
-.btn.btn-deactivate:hover {
-  background-color: #b91c1c;
-  color: #fff;
-  border-color: #b91c1c;
-}
 .card.deactivated {
     opacity: 0.5;
     pointer-events: none; 
@@ -178,16 +205,81 @@ small{color:var(--muted)}
     transform: none; 
 }
 
-.card.deactivated .actions .btn {
-    pointer-events: auto; 
+
+/* 1. Butonul STANDARD (Alb - Detalii) */
+.btn {
+    display: inline-flex;       /* Centrare mai bună decât flex:1 */
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;         /* Dimensiune fixă și egală */
+    background-color: #ffffff;  /* Alb */
+    color: #222222;             /* Text Negru */
+    border: 1px solid #dddddd;  /* Bordură fină */
+    border-radius: 8px;         
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animație fluidă */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* Umbră foarte fină default */
 }
-.card.deactivated .btn.btn-deactivate {
-    opacity: 1; 
-    pointer-events: auto; 
-    background-color: #22c55e; 
+
+/* Hover pentru butonul Alb */
+.btn:hover {
+    background-color: #f7f7f7;
+    border-color: #000000;      /* Contrast la hover */
+    transform: translateY(-2px); /* Se ridică puțin */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+}
+
+/* 2. Butonul PRIMARY (Roșu - Rezervă) */
+.btn.primary {
+    background-color: #ff385c;
     color: white;
-    border-color: #22c55e;
+    border: 1px solid #ff385c; /* Păstrăm border pt dimensiuni identice */
 }
-.card.deactivated .btn.btn-deactivate:hover {
-    background-color: #16a34a;
+
+/* Hover pentru butonul Roșu */
+.btn.primary:hover {
+    background-color: #d9324e;
+    border-color: #d9324e;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(255, 56, 92, 0.25);
+}
+
+/* 3. Butonul ADMIN (Dezactivează) */
+.btn-deactivate {
+    /* Nu îl facem flex:1, îl lăsăm compact */
+    padding: 10px 15px; 
+    background-color: #fff0f0;
+    color: #cc0000;
+    border: 1px solid #ffcccc;
+    font-size: 0.8rem; /* Puțin mai mic, e funcție secundară */
+}
+
+.btn-deactivate:hover {
+    background-color: #ffe0e0;
+    border-color: #ffaaaa;
+    transform: translateY(-2px);
+}
+
+
+.btn-publish {
+    background-color: transparent !important; /* Fără fundal colorat */
+    color: #6b7280 !important;            /* Textul rămâne Roz/Roșu */
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 10px;
+    padding: 8px 16px;                    /* Spațiere fină */
+    border-radius: 20px;                  /* Rotunjit mult (capsulă) */
+    transition: background-color 0.2s;
+}
+
+.btn-publish:hover {
+    background-color: #f7f7f7 !important; 
+    border-color: #d9324e;
+    color: #ff385c !important;
+    transform: none;                      /* Fără efect de zoom */
+    box-shadow: none;                   
 }

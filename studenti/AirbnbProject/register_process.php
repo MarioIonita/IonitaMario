@@ -3,39 +3,48 @@ session_start();
 require 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user = $_POST['username'];
-    $email = $_POST['email'];
-    $pass = $_POST['password'];
-    
-    // Verificăm dacă mailul există deja
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    
-    if ($stmt->rowCount() > 0) {
-        die("Eroare: Acest email este deja folosit. <a href='register.php'>Încearcă din nou</a>");
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+
+    // Validări simple
+    if (empty($username) || empty($email) || empty($password)) {
+        $_SESSION['error'] = "Toate câmpurile sunt obligatorii!";
+        header("Location: register.php");
+        exit();
     }
 
-    // Hashuim parola
-    $hash = password_hash($pass, PASSWORD_DEFAULT);
-
-    if (isset($_POST['tip_cont']) && $_POST['tip_cont'] === 'proprietar') {
-    $role_id = 3; // ID-ul pentru Proprietar
-} else {
-    $role_id = 2; // Default: User simplu (Turist)
-}
-
-    $sql = "INSERT INTO users (username, email, password_hash, role_id, created_at) VALUES (?, ?, ?, ?, NOW())";
-    $stmt = $pdo->prepare($sql);
-    
-    if ($stmt->execute([$user, $email, $hash, $role_id])) {
-        // Logam userul direct
-        $_SESSION['user_id'] = $pdo->lastInsertId();
-        $_SESSION['username'] = $user;
-        $_SESSION['role_id'] = $role_id;
-        header("Location: index.php");
+    if ($password !== $confirm_password) {
+        $_SESSION['error'] = "Parolele nu coincid!";
+        header("Location: register.php");
         exit();
-    } else {
-        echo "Ceva nu a mers.";
+    }
+
+    // Verificăm dacă există deja email-ul
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    if ($stmt->fetch()) {
+        $_SESSION['error'] = "Acest email este deja folosit.";
+        header("Location: register.php");
+        exit();
+    }
+
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    $default_role = 2; 
+
+    try {
+        $sql = "INSERT INTO users (username, email, password_hash, role_id) VALUES (?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$username, $email, $hashed_password, $default_role]);
+
+        $_SESSION['success'] = "Cont creat cu succes! Te poți loga.";
+        header("Location: login.php");
+        exit();
+    } catch (Exception $e) {
+        $_SESSION['error'] = "Eroare tehnică: " . $e->getMessage();
+        header("Location: register.php");
+        exit();
     }
 }
 ?>

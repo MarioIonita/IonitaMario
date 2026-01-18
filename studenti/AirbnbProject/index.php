@@ -26,18 +26,21 @@ session_start();
                 </div>
             </a>
 
-            <nav style="margin-left:auto">
-                <a href="about.php">Despre</a>
-                <a href="listings.php">Anunturi</a>
-                <a href="support.php">Suport</a>
-                
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <span style="font-weight:600; margin-right:10px;">Salut, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
-                    <a class="cta" href="logout.php" style="background-color:var(--muted);">Logout</a>
-                <?php else: ?>
-                    <a class="cta" href="login.php">Login / Publică</a>
-                <?php endif; ?>
-            </nav>
+                            <nav style="margin-left:auto; display:flex; align-items:center;">
+                                    <a href="about.php">Despre</a>
+                                    <a href="listings.php">Anunțuri</a>
+                                    <a href="support.php">Suport</a> <?php if (isset($_SESSION['user_id'])): ?>
+                                        
+                                        <a href="upload.php" class="btn-publish">Publică Anunț</a>
+                                        
+                                        <a class="cta" href="logout.php" style="background-color:var(--muted); margin-left:15px;" title="Ieși din cont">
+                                            Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)
+                                        </a>
+
+                                    <?php else: ?>
+                                        <a class="cta" href="login.php">Login / Publică</a>
+                                    <?php endif; ?>
+                            </nav>
         </div>
     </header>
 
@@ -64,19 +67,14 @@ session_start();
 
         <section class="section">
             <h2 style="margin:0">Cazări populare</h2>
-            <p style="color:var(--muted);margin:.4rem 0 0 0">Selecție aleasă manual de gazdele noastre</p>
+            <p style="color:var(--muted);margin:.4rem 0 0 0"></p>
 
             <div id="listings" class="grid">
                 <?php
                 require 'db.php'; 
 
-                // 1. Query Default (User normal vede doar active)
-                $sql = "SELECT * FROM listings WHERE is_active = 1"; 
-
-                // 2. Query Admin (Admin vede tot)
-                if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) {
-                    $sql = "SELECT * FROM listings"; 
-                }
+                // SELECT SPECIAL: Luăm doar primele 3 anunțuri cu cel mai mare rating
+                $sql = "SELECT * FROM listings ORDER BY rating DESC LIMIT 4";
 
                 try {
                     $stmt = $pdo->query($sql);
@@ -89,33 +87,36 @@ session_start();
                 if (empty($listings)) {
                     echo "<p>Nu există anunțuri de afișat.</p>";
                 } else {
-                    // Folosim { } in loc de endforeach pentru a evita erorile de sintaxa
+                   
                     foreach ($listings as $row) {
                         $isActive = $row['is_active']; 
                         $cssClass = ($isActive == 0) ? 'card deactivated' : 'card';
                         $btnText = ($isActive == 0) ? 'Activează' : 'Dezactivează';
                         
-                        // HTML-ul pentru Card
                         ?>
                         <article class="<?php echo $cssClass; ?>" 
                                  data-id="<?php echo $row['id']; ?>" 
                                  data-title="<?php echo htmlspecialchars($row['title']); ?>" 
                                  data-city="<?php echo htmlspecialchars($row['city']); ?>">
                             
-                            <img src="<?php echo htmlspecialchars($row['image_url']); ?>" alt="Cazare" />
+                            <div class="img-ratio-box">
+                                <img src="<?php echo htmlspecialchars($row['image_url']); ?>" alt="Cazare" class="standard-img" />
+                            </div>
                             
                             <div class="info">
                                 <div class="title"><?php echo htmlspecialchars($row['title']); ?></div>
                                 <div class="meta">
                                     <span><?php echo htmlspecialchars($row['city']); ?></span>
-                                    <span style="color:var(--muted)">4.9 ★</span>
+                                    <span style="color:var(--muted)"><?php echo number_format($row['rating'], 1); ?>★</span>
                                 </div>
                                 
                                 <div style="display:flex;justify-content:space-between;align-items:center">
                                     <div class="price"><?php echo htmlspecialchars($row['price']); ?> RON/noapte</div>
                                     <div class="actions">
-                                        <button class="btn">Detalii</button>
-                                        <button class="btn primary">Rezervă</button>
+                                        <a href="details.php?id=<?php echo $row['id']; ?>" class="btn">Detalii</a>
+                                        <a href="details.php?id=<?php echo $row['id']; ?>#rezerva" class="btn primary">
+    Rezervă
+</a>
                                         
                                         <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
                                             <button class="btn btn-deactivate"><?php echo $btnText; ?></button>
@@ -125,8 +126,8 @@ session_start();
                             </div>
                         </article>
                         <?php 
-                    } // Inchidere foreach cu acolada
-                } // Inchidere else cu acolada
+                    } 
+                } 
                 ?>
             </div>
 
@@ -135,16 +136,7 @@ session_start();
             </div>
         </section>
 
-        <section class="section">
-            <h2 style="margin:0">Ce spun călătorii</h2>
-            <div class="testimonials" style="margin-top:.8rem">
-                <div class="testimonial">
-                    <strong>Maria</strong>
-                    <p style="margin:.4rem 0 .2rem 0;color:var(--muted)">"Gazda a fost foarte primitoare."</p>
-                    <small>— București</small>
-                </div>
-            </div>
-        </section>
+        
 
         <footer>
             <div class="foot-grid">
@@ -153,7 +145,7 @@ session_start();
                     <div style="margin-top:.4rem"><small>© <span id="year"></span> Toate drepturile rezervate</small></div>
                 </div>
                 <div style="display:flex;gap:1rem;align-items:center">
-                    <a href="#" style="color:var(--muted);text-decoration:none">Contact</a>
+                    <a href="support.php" style="color:var(--muted);text-decoration:none">Contact</a>
                 </div>
             </div>
         </footer>
@@ -169,14 +161,14 @@ session_start();
         const isCurrentlyDeactivated = card.classList.contains('deactivated');
         const newState = isCurrentlyDeactivated ? 'active' : 'deactivated'; 
 
-        // Apelam fisierul PHP creat la Pasul 1
+        
         fetch('toggle_listing.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: listingId, status: newState })
         })
         .then(response => {
-            // Verificam daca raspunsul e valid JSON
+            
             if(!response.ok) throw new Error("Network response was not ok");
             return response.json();
         })
@@ -196,7 +188,6 @@ session_start();
         });
     }
 
-    // 2. Initializare Butoane Admin
     document.addEventListener('DOMContentLoaded', () => {
         const deactivateButtons = document.querySelectorAll('.btn-deactivate');
         if (deactivateButtons.length > 0) {
