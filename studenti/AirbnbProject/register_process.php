@@ -2,7 +2,8 @@
 session_start();
 require 'db.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") { 
+    //preluare input (trim pentru spatii ( previne erori))
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
@@ -29,17 +30,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: register.php");
         exit();
     }
-
+ // hash password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $default_role = 2; 
+    $default_role = 2;  // standard role = user 
 
-    try {
+    try { // inserare in baza de date 
         $sql = "INSERT INTO users (username, email, password_hash, role_id) VALUES (?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$username, $email, $hashed_password, $default_role]);
 
         $_SESSION['success'] = "Cont creat cu succes! Te poți loga.";
-        header("Location: login.php");
+        header("Location: login.php"); // redirect 
         exit();
     } catch (Exception $e) {
         $_SESSION['error'] = "Eroare tehnică: " . $e->getMessage();

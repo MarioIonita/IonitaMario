@@ -73,7 +73,7 @@ session_start();
                 <?php
                 require 'db.php'; 
 
-                // SELECT SPECIAL: Luăm doar primele 3 anunțuri cu cel mai mare rating
+                // Primele 4 anunturi in functie de rating
                 $sql = "SELECT * FROM listings ORDER BY rating DESC LIMIT 4";
 
                 try {
@@ -87,7 +87,7 @@ session_start();
                 if (empty($listings)) {
                     echo "<p>Nu există anunțuri de afișat.</p>";
                 } else {
-                   
+                   //Verifica daca isActive = 0 / 1 
                     foreach ($listings as $row) {
                         $isActive = $row['is_active']; 
                         $cssClass = ($isActive == 0) ? 'card deactivated' : 'card';
@@ -118,7 +118,8 @@ session_start();
     Rezervă
 </a>
                                         
-                                        <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?>
+                                        <?php //butonul de deactivate apare doar la admin 
+                                        if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1): ?> 
                                             <button class="btn btn-deactivate"><?php echo $btnText; ?></button>
                                         <?php endif; ?>
                                     </div>
@@ -152,16 +153,16 @@ session_start();
     </main>
 
    <script>
-    // 1. Functia de Dezactivare
+    //  Functia de Dezactivare
     function handleDeactivation(event) {
-        const card = event.target.closest('.card');
+        const card = event.target.closest('.card'); //selectare card (care trebuie dezactivat)
         if (!card) return;
-
+                                            
         const listingId = card.getAttribute('data-id'); 
         const isCurrentlyDeactivated = card.classList.contains('deactivated');
-        const newState = isCurrentlyDeactivated ? 'active' : 'deactivated'; 
+        const newState = isCurrentlyDeactivated ? 'active' : 'deactivated'; // inversare stare
 
-        
+        // se trimit datele catre backend in format json
         fetch('toggle_listing.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -172,8 +173,8 @@ session_start();
             if(!response.ok) throw new Error("Network response was not ok");
             return response.json();
         })
-        .then(data => {
-            if (data.success) {
+        .then(data => {  
+            if (data.success) {// daca DB a fost modificata corect se modifica DOM ul 
                 const isDeactivated = card.classList.toggle('deactivated');
                 event.target.textContent = isDeactivated ? 'Activează' : 'Dezactivează';
                 card.dataset.status = isDeactivated ? 'deactivated' : '';
@@ -188,11 +189,11 @@ session_start();
         });
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {  // sincronizare DOM 
         const deactivateButtons = document.querySelectorAll('.btn-deactivate');
         if (deactivateButtons.length > 0) {
             deactivateButtons.forEach(button => {
-                button.addEventListener('click', handleDeactivation);
+                button.addEventListener('click', handleDeactivation); // legare buton de handleDeactivation
             });
         }
         
@@ -209,17 +210,17 @@ session_start();
 
     if(form) {
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // opreste reloadul formularului 
             filterListings(input.value.trim().toLowerCase());
         });
     }
 
-    function filterQuick(city){
+    function filterQuick(city){ // butoane rapide 
         input.value = city;
         filterListings(city.toLowerCase());
     }
 
-    function filterListings(q){
+    function filterListings(q){ // cauta textul in data title si data city
         let visible = 0;
         listings.forEach(card => {
             const title = card.getAttribute('data-title')?.toLowerCase() || '';

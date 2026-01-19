@@ -1,5 +1,6 @@
 <?php
 session_start();
+//doar useri logati
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();

@@ -283,3 +283,10 @@ small{color:var(--muted)}
     transform: none;                      /* Fără efect de zoom */
     box-shadow: none;                   
 }
+.card.deactivated .btn-deactivate {
+    pointer-events: auto !important; /* Permite click-ul strict pe acest buton */
+    cursor: pointer;
+    opacity: 1; /* Să se vadă clar că e activ */
+    position: relative;
+    z-index: 100; /* Să fie deasupra "stratului" inactiv */
+}

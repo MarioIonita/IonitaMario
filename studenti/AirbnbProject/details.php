@@ -2,20 +2,21 @@
 session_start();
 require 'db.php';
 
-// 1. Validare ID
+// Validare ID
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header("Location: listings.php"); exit;
 }
 $id = $_GET['id'];
 
 try {
-    // A. Detalii Principale
+    // se ia anuntul din baza de date 
     $stmt = $pdo->prepare("SELECT * FROM listings WHERE id = ?");
     $stmt->execute([$id]);
     $listing = $stmt->fetch();
+    // daca id ul nu exista 
     if (!$listing) die("Anunț inexistent.");
 
-    // B. LOGICA DE BLOCARE (FETCH BOOKED DATES)
+    
     // Căutăm toate rezervările care nu s-au terminat încă
     $stmt_b = $pdo->prepare("SELECT check_in, check_out FROM bookings WHERE listing_id = ?");
     $stmt_b->execute([$id]);
@@ -31,7 +32,7 @@ try {
     }
 
 } catch (Exception $e) { die("Eroare SQL: " . $e->getMessage()); }
-
+// pregatire descriere
 $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
 ?>
 
@@ -50,31 +51,7 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="details.css"> 
 
-    <style>
-        /* Sliderul trebuie să aibă înălțime fixă */
-        .swiper {
-            width: 100%;
-            height: 450px; 
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            background-color: #f0f0f0;
-        }
-        .swiper-slide img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        /* Layout flexibil */
-        .details-container {
-            display: flex;
-            gap: 40px; 
-            align-items: flex-start;
-        }
-        @media (max-width: 900px) {
-            .details-container { flex-direction: column; } 
-        }
-    </style>
+   
 </head>
 <body>
 
@@ -89,7 +66,7 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
                 <a href="listings.php">Anunțuri</a>
                 <a href="support.php">Suport</a> 
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="create_listing.php" class="btn-publish">Publică Anunț</a>
+                    <a href="upload.php" class="btn-publish">Publică Anunț</a>
                     <a class="cta" href="logout.php" style="background-color:var(--muted); margin-left:15px;">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
                 <?php else: ?>
                     <a class="cta" href="login.php">Login / Publică</a>
@@ -104,7 +81,7 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
         <p style="color:var(--muted); margin-top:0;">
     📍 <?php echo htmlspecialchars($listing['city']); ?> • 
     <strong>
-        <?php 
+        <?php  // afisare rating 
         if ($listing['review_count'] > 0) {
             echo "★ " . $listing['rating'] . " (" . $listing['review_count'] . " recenzii)";
         } else {
@@ -117,7 +94,7 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
                <?php
-                // --- LISTA UNIFICATĂ DE IMAGINI ---
+                // Lista de imagini 
                 $all_slides = [];
 
                 // 1. Punem PRIMA dată poza principală (cea sigură, de pe Index)
@@ -161,6 +138,38 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
         <div class="details-container">
             
             <section style="flex: 2;"> 
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid #eee; padding-bottom:1rem; margin-bottom:1rem;">
+                    <h3>Gazdă: <?php echo htmlspecialchars($_SESSION['username'] ?? 'Superhost'); ?></h3>
+                    <span>Max <?php echo $listing['max_guests'] ?? 2; ?> Oaspeți</span>
+                </div>
+                
+                <p style="line-height:1.6; color:#333; font-size:1.05rem;">
+                    <?php echo nl2br(htmlspecialchars($desc)); ?>
+                </p>
+
+                <div style="margin-top:2rem;">
+                    <h3>Ce oferă acest loc</h3>
+                    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:15px;">
+                        <?php 
+                        $facilities_data = isset($listing['facility']) ? $listing['facility'] : '';
+                        $facilities_array = explode(", ", $facilities_data);
+                        $icons_map = [ 
+                            "Wifi"=>"📶 Wi-Fi", "Parcare"=>"🅿️ Parcare", "Piscina"=>"🏊 Piscină", 
+                            "Aer Conditionat"=>"❄️ AC", "Bucatarie"=>"🍳 Bucătărie", "Balcon"=>"🌅 Balcon" 
+                        ];
+                        
+                        $found_any = false;
+                        foreach ($facilities_array as $item) {
+                            $item = trim($item);
+                            if (array_key_exists($item, $icons_map)) {
+                                $found_any = true;
+                                echo '<div class="tag">' . $icons_map[$item] . '</div>';
+                            }
+                        }
+                        if (!$found_any) echo '<span style="color:#888; font-style:italic">Nu sunt specificate facilități.</span>';
+                        ?>
+                    </div>
+                </div>
                 <div style="margin-top:4rem; border-top:1px solid #eee; padding-top:2rem;">
     <h2>Recenzii</h2>
 
@@ -209,7 +218,7 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
 
         if (count($reviews) > 0) {
             foreach ($reviews as $rev) {
-                // Generăm steluțele vizual
+                // display stelute in functie de rating 
                 $stars = str_repeat("★", $rev['rating']) . str_repeat("☆", 5 - $rev['rating']);
                 
                 echo '
@@ -285,7 +294,7 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
    <script>
     document.addEventListener('DOMContentLoaded', function() {
         
-        // 1. ACTIVARE SLIDESHOW (Rămâne la fel)
+        // 1. SlideShow
         var swiper = new Swiper(".mySwiper", {
             loop: true,
             effect: "fade",
@@ -294,10 +303,10 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
             autoplay: { delay: 4500, disableOnInteraction: false }
         });
 
-        // 2. CALENDAR (CU DETECȚIE AUTOMATĂ)
+        // 2. CALENDAR 
         const blockedDates = <?php echo json_encode($blocked_dates); ?>;
 
-        // Salvăm calendarul într-o variabilă 'fp' ca să-l putem comanda
+        // Salvăm calendarul 
         const fp = flatpickr("#datePicker", {
             mode: "range", 
             minDate: "today",
@@ -314,14 +323,13 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
             }
         });
 
-        // --- TRUCUL DE MAGIE (Auto-Open) ---
-        // Dacă în URL avem #rezerva (vine de pe butonul Rezervă)
+        // daca se apasa "Rezerva" 
         if (window.location.hash === '#rezerva') {
             // Așteptăm 500ms să se randeze pagina complet
             setTimeout(function() {
-                // Ducem userul lin la formular
+                // Ducem userul la formular 
                 document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth' });
-                // Și deschidem calendarul automat!
+                // Și deschidem calendarul automat
                 fp.open(); 
             }, 500);
         }
@@ -333,7 +341,7 @@ $desc = $listing['description'] ?: "Descriere indisponibilă momentan.";
             if (!checkIn || !checkOut) {
                 e.preventDefault();
                 alert("Selectează perioada!");
-                // Dacă uită să selecteze, îi deschidem calendarul iar :)
+                // Dacă uită să selecteze, redeschidem calendarul
                 fp.open();
             }
         });

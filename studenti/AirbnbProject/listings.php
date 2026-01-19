@@ -148,15 +148,16 @@ require 'db.php';
 </footer>
 
     <script>
-    // 1. Funcția de Dezactivare (Backend)
+    // 1. Funcția de Dezactivare 
     function handleDeactivation(event) {
-        const card = event.target.closest('.card');
+        const card = event.target.closest('.card'); //selectare card (care trebuie dezactivat)
         if (!card) return;
 
         const listingId = card.getAttribute('data-id'); 
         const isCurrentlyDeactivated = card.classList.contains('deactivated');
-        const newState = isCurrentlyDeactivated ? 'active' : 'deactivated'; 
-
+        const newState = isCurrentlyDeactivated ? 'active' : 'deactivated';  // inversare stare
+        
+        // se trimit datele catre backend in format json
         fetch('toggle_listing.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -164,7 +165,7 @@ require 'db.php';
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
+            if (data.success) { // daca DB a fost modificata corect se modifica DOM ul 
                 const isDeactivated = card.classList.toggle('deactivated');
                 event.target.textContent = isDeactivated ? 'Activează' : 'Dezactivează';
                 alert('Status actualizat permanent!');
@@ -175,11 +176,11 @@ require 'db.php';
         .catch(err => console.error('Eroare:', err));
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => { // sincronizare DOM 
         const listingsContainer = document.getElementById('listingsContainer');
         const allCards = Array.from(document.querySelectorAll('.card'));
         
-        // Data mapping
+        // Data mapping ( DOM -> date)
         let cardData = allCards.map(card => ({
             element: card,
             city: card.dataset.city,
@@ -189,7 +190,7 @@ require 'db.php';
 
         // Activare butoane Admin
         document.querySelectorAll('.btn-deactivate').forEach(btn => {
-            btn.addEventListener('click', handleDeactivation);
+            btn.addEventListener('click', handleDeactivation); // legare buton de handleDeactivation
         });
 
         // Setare An Footer
@@ -206,12 +207,12 @@ require 'db.php';
             citySelect.appendChild(opt);
         });
 
-        document.getElementById('applyFilterBtn').addEventListener('click', () => {
+        document.getElementById('applyFilterBtn').addEventListener('click', () => { // preluarea criteriilor 
             const min = parseInt(document.getElementById('minPrice').value) || 0;
             const max = parseInt(document.getElementById('maxPrice').value) || Infinity;
             const city = citySelect.value;
 
-            cardData.forEach(card => {
+            cardData.forEach(card => { // verificam fiecare card in parte 
                 const matchPrice = card.price >= min && card.price <= max;
                 const matchCity = !city || card.city === city;
                 card.element.style.display = (matchPrice && matchCity) ? '' : 'none';
@@ -220,14 +221,14 @@ require 'db.php';
 
         document.getElementById('resetFilterBtn').addEventListener('click', () => {
             document.getElementById('filterForm').reset();
-            cardData.forEach(c => c.element.style.display = '');
+            cardData.forEach(c => c.element.style.display = ''); // new order display
         });
 
         // --- Logica Sortare ---
         function sortListings(dir) {
-            cardData.sort((a, b) => (dir === 'asc' ? a.price - b.price : b.price - a.price));
+            cardData.sort((a, b) => (dir === 'asc' ? a.price - b.price : b.price - a.price)); // asc mic mare / desc mare mic 
             listingsContainer.innerHTML = '';
-            cardData.forEach(c => listingsContainer.appendChild(c.element));
+            cardData.forEach(c => listingsContainer.appendChild(c.element)); // reordonarea elementelor 
         }
 
         document.getElementById('sortAscBtn').addEventListener('click', () => sortListings('asc'));

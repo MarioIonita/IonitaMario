@@ -18,8 +18,8 @@ $guests = isset($_GET['guests']) ? (int)$_GET['guests'] : 1;
 
 // Luăm detaliile cazării din DB
 $stmt = $pdo->prepare("SELECT * FROM listings WHERE id = ?");
-$stmt->execute([$listing_id]);
-$listing = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt->execute([$listing_id]); // executa query uul si inlocuieste ? cu listgn_id 
+$listing = $stmt->fetch(PDO::FETCH_ASSOC); // associative array - [lsiting ['title'], listing['price'],etc
 
 if (!$listing) {
     die("Eroare: Anunțul nu a fost găsit.");
@@ -73,7 +73,7 @@ $total_price = $listing['price'] * $nights;
                     </div>
 
                     <hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;">
-
+                    <!-- formularul de confirmare -->
                     <form action="booking_process.php" method="POST">
                         <input type="hidden" name="listing_id" value="<?php echo $listing_id; ?>">
                         <input type="hidden" name="check_in" value="<?php echo $check_in; ?>">

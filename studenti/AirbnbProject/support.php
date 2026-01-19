@@ -1,22 +1,26 @@
 <?php
 session_start();
 
-// --- LOGICA PHP (Rămâne neschimbată) ---
+//initializare 
 $msg_sent = false;
 $msg_error = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //preluare si curatare date
     $nume = htmlspecialchars(trim($_POST['name']));
     $email = htmlspecialchars(trim($_POST['email']));
     $mesaj = htmlspecialchars(trim($_POST['message']));
 
+    //validare date 
     if (!empty($nume) && !empty($email) && !empty($mesaj)) {
+        //construire mail
         $to = "contact@homeeverywhere.com"; 
         $subject = "Mesaj nou Suport de la $nume";
         $email_content = "Nume: $nume\nEmail: $email\n\nMesaj:\n$mesaj\n";
         $headers = "From: noreply@homeeverywhere.com\r\n";
         $headers .= "Reply-To: $email\r\n";
 
+        //trimitere mail 
         if (mail($to, $subject, $email_content, $headers)) {
             $msg_sent = true;
         } else {
